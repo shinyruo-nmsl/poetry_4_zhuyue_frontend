@@ -1,28 +1,31 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import { Menu as _Menu } from "antd";
 import type { MenuProps } from "antd";
-import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
 
-const items: MenuProps["items"] = [
-  {
-    label: "Navigation One",
-    key: "mail",
-    icon: <MailOutlined />,
-  },
-  {
-    label: "Navigation Two",
-    key: "app",
-    icon: <AppstoreOutlined />,
-  },
-  {
-    label: "Navigation Three - Submenu",
-    key: "SubMenu",
-    icon: <SettingOutlined />,
-  },
-];
+import Router from "../router";
+import { useState } from "react";
+
 export default function Menu() {
-  return <_Menu selectedKeys={["mail"]} mode="vertical" items={items} />;
+  const { pathname } = useLocation();
+  const naigate = useNavigate();
+
+  const [keys, setKeys] = useState(
+    Router.search(pathname.split("/").filter(Boolean), "path").map((r) => r.key)
+  );
+
+  const handleClickMenu: MenuProps["onClick"] = (e) => {
+    const trace = Router.search(e.keyPath.reverse(), "key");
+    setKeys(trace.map((r) => r.key));
+    naigate(`/${trace.map((r) => r.path).join("/")}`);
+  };
+
+  return (
+    <_Menu
+      defaultOpenKeys={keys}
+      selectedKeys={keys}
+      mode="inline"
+      items={Router.subRoutes()}
+      onClick={handleClickMenu}
+    />
+  );
 }

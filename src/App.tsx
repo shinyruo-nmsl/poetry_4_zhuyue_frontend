@@ -1,8 +1,8 @@
-import Menu from "./layout/Menu";
+import Layout from "./layout";
 import "./App.css";
 
 function App() {
-  return <Menu></Menu>;
+  return <Layout></Layout>
 }
 
 export default App;

@@ -37,15 +37,24 @@ export async function request<T>(
   return handleResponse(res);
 }
 
-function handleResponse<T extends string>(res: AxiosResponse<T, any>) {
+function handleResponse<T>(res: AxiosResponse<T, any>) {
   const code = res.status;
 
   switch (code) {
     case 400:
-      throw new Error((res.data as { msg: string })?.msg || "参数出错~");
+      throw new Error(
+        (parseData(res.data) as { msg: string })?.msg || "参数出错~"
+      );
     case 500:
       throw new Error("服务端错误~");
     default:
-      return JSON.parse(res.data);
+      return parseData(res.data);
   }
+}
+
+// https://github.com/axios/axios/issues/1723
+// if data is too large, axios does't parse
+function parseData(data: any) {
+  if (typeof data === "string") return JSON.parse(data);
+  return data;
 }

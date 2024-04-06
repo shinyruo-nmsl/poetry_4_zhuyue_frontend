@@ -1,6 +1,8 @@
 import { Table, TableProps, Pagination as PaginationComp } from "antd";
 
-import { Pagination } from "../global-type/model";
+import { Pagination } from "../../global-type/model";
+
+import "./index.less";
 
 interface Props<T> {
   tableProps?: TableProps<T>;

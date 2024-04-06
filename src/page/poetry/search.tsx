@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Input, Button, Table } from "antd";
+import { Input, Button } from "antd";
 
 import {
   fetchGetPoetriesByAuthorAndKeyWords,
+  splitPoetryContentByKeyWords,
   PoetryPagination,
 } from "./service";
 import PaginationTable from "../../component/PaginationTable";
@@ -33,6 +34,25 @@ function PoetrySearch() {
       title: "内容",
       dataIndex: "content",
       key: "content",
+      render: (text: string) => {
+        const fragments = splitPoetryContentByKeyWords(
+          text,
+          keyword1,
+          keyword2
+        );
+        return (
+          <div className="poetry-content">
+            {fragments.map((frag, index) => (
+              <span
+                key={index}
+                className={[keyword1, keyword2].includes(frag) ? "keyword" : ""}
+              >
+                {frag}
+              </span>
+            ))}
+          </div>
+        );
+      },
       width: 750,
     },
   ];

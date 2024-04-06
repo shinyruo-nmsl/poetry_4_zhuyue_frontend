@@ -23,3 +23,60 @@ export function fetchGetPoetriesByAuthorAndKeyWords(
     params: { ...query },
   });
 }
+
+const getPoetryContentPattern = (keyword1: string, keyword2: string) => {
+  return new RegExp(
+    `${keyword1}[^。]*${keyword2}|${keyword2}[^。]*${keyword1}`
+  );
+};
+
+export const isFitPoetryContentPattern = (
+  text: string,
+  keyword1: string,
+  keyword2: string
+) => {
+  return getPoetryContentPattern(keyword1, keyword2).test(text);
+};
+
+export function splitPoetryContentByKeyWords(
+  content: string,
+  keyword1: string,
+  keyword2: string
+) {
+  const chunks = content.split(getPoetryContentPattern(keyword1, keyword2));
+
+  const helper = (content: string, keyword1: string, keyword2: string) => {
+    let start: string;
+    let end: string;
+    if (content.startsWith(keyword1)) {
+      [start, end] = [keyword1, keyword2];
+    } else {
+      [end, start] = [keyword1, keyword2];
+    }
+    const endIndex = content.indexOf(end);
+    return {
+      chunks: [start, content.slice(start.length, endIndex), end],
+      len: endIndex + end.length,
+    };
+  };
+
+  return chunks.reduce(
+    ({ result, index }: { result: string[]; index: number }, cur) => {
+      if (index + cur.length === content.length) {
+        return { result: [...result, cur], index: index + cur.length };
+      }
+
+      const regxRes = helper(
+        content.slice(index + cur.length),
+        keyword1,
+        keyword2
+      );
+
+      return {
+        result: [...result, cur, ...regxRes.chunks],
+        index: index + cur.length + regxRes.len,
+      };
+    },
+    { result: [], index: 0 }
+  ).result;
+}

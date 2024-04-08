@@ -18,6 +18,13 @@ const _router = createBrowserRouter([
 const Router = {
   router: () => _router,
   subRoutes: () => _subRoutes,
+  menuRoutes(children: SubRoute[] = _subRoutes): SubRoute[] | undefined {
+    return children && children.length
+      ? children
+          .filter((r) => typeof r.show === "undefined" || r.show)
+          .map((r) => ({ ...r, children: this.menuRoutes(r.children || []) }))
+      : undefined;
+  },
   search(
     paths: string[],
     key: "key" | "path",

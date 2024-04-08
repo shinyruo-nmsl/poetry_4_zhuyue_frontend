@@ -24,7 +24,7 @@ export default function Menu() {
       defaultOpenKeys={keys}
       selectedKeys={keys}
       mode="inline"
-      items={Router.subRoutes()}
+      items={Router.menuRoutes()}
       onClick={handleClickMenu}
     />
   );

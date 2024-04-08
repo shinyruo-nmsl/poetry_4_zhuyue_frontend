@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Input, Button } from "antd";
 
 import {
@@ -34,25 +34,31 @@ function PoetrySearch() {
       title: "内容",
       dataIndex: "content",
       key: "content",
-      render: (text: string) => {
-        const fragments = splitPoetryContentByKeyWords(
-          text,
-          keyword1,
-          keyword2
-        );
-        return (
-          <div className="poetry-content">
-            {fragments.map((frag, index) => (
-              <span
-                key={index}
-                className={[keyword1, keyword2].includes(frag) ? "keyword" : ""}
-              >
-                {frag}
-              </span>
-            ))}
-          </div>
-        );
-      },
+      render: useCallback(
+        (text: string) => {
+          const fragments = splitPoetryContentByKeyWords(
+            text,
+            keyword1,
+            keyword2
+          );
+          return (
+            <div className="poetry-content">
+              {fragments.map((frag, index) => (
+                <span
+                  key={index}
+                  className={
+                    [keyword1, keyword2].includes(frag) ? "keyword" : ""
+                  }
+                >
+                  {frag}
+                </span>
+              ))}
+            </div>
+          );
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [poetryPagination]
+      ),
       width: 750,
     },
   ];

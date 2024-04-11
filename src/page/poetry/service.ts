@@ -51,9 +51,9 @@ export function splitPoetryContentByKeyWords(
 
   if (!keyword1 || !keyword2) {
     chunks = content.split(keyword1 || keyword2);
+  } else {
+    chunks = content.split(getPoetryContentPattern(keyword1, keyword2));
   }
-
-  chunks = content.split(getPoetryContentPattern(keyword1, keyword2));
 
   const helper = (content: string, keyword1: string, keyword2: string) => {
     let start: string;
@@ -90,5 +90,3 @@ export function splitPoetryContentByKeyWords(
     { result: [], index: 0 }
   ).result;
 }
-
-console.log(splitPoetryContentByKeyWords("黄河之水天上来", "河", ""));

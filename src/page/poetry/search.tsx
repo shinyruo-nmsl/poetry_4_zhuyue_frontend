@@ -77,8 +77,9 @@ function PoetrySearch() {
   };
 
   const handleClickSearchButton = async () => {
+    setPageNo(0);
     const data = await fetchGetPoetriesByAuthorAndKeyWords({
-      pageNo,
+      pageNo: 0,
       limit,
       keyword1,
       keyword2,

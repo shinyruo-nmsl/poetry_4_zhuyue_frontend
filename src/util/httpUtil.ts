@@ -12,8 +12,6 @@ type Method =
 
 let axiosInstance: Axios;
 
-const Default_Host = "http://localhost:3333";
-
 function getAxiosInstance() {
   if (!axiosInstance) {
     axiosInstance = new Axios({});
@@ -27,7 +25,7 @@ export async function request<T>(
   const { url } = config;
   const _config = { ...config };
   if (url?.startsWith("/")) {
-    _config.url = `${Default_Host}${url}`;
+    _config.url = `${process.env.APP_BASE_ENV}${url}`;
   }
 
   const res = await getAxiosInstance().request<any, AxiosResponse<T, any>>(

@@ -25,7 +25,7 @@ export async function request<T>(
   const { url } = config;
   const _config = { ...config };
   if (url?.startsWith("/")) {
-    _config.url = `${process.env.APP_BASE_API}${url}`;
+    _config.url = `${import.meta.env.APP_BASE_API}${url}`;
   }
 
   const res = await getAxiosInstance().request<any, AxiosResponse<T, any>>(

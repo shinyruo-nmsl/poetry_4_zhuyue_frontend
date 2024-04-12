@@ -47,13 +47,7 @@ export function splitPoetryContentByKeyWords(
     return content.split("");
   }
 
-  let chunks;
-
-  if (!keyword1 || !keyword2) {
-    chunks = content.split(keyword1 || keyword2);
-  } else {
-    chunks = content.split(getPoetryContentPattern(keyword1, keyword2));
-  }
+  const chunks = content.split(getPoetryContentPattern(keyword1, keyword2));
 
   const helper = (content: string, keyword1: string, keyword2: string) => {
     let start: string;

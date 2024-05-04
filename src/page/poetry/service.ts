@@ -56,6 +56,18 @@ export function splitPoetryContentByKeyWords(
   }
 
   const helper = (content: string, keyword1: string, keyword2: string) => {
+    if (!keyword1)
+      return {
+        chunks: [keyword2],
+        len: keyword2.length,
+      };
+
+    if (!keyword2)
+      return {
+        chunks: [keyword1],
+        len: keyword1.length,
+      };
+
     let start: string;
     let end: string;
     if (content.startsWith(keyword1)) {

@@ -25,7 +25,7 @@ export async function request<T>(
   const { url } = config;
   const _config = { ...config };
   if (url?.startsWith("/")) {
-    _config.url = `${process.env.APP_BASE_API}${url}`;
+    _config.url = `${import.meta.env.VITE_APP_BASE_API}${url}`;
   }
 
   const res = await getAxiosInstance().request<any, AxiosResponse<T, any>>(
@@ -40,9 +40,10 @@ function handleResponse<T>(res: AxiosResponse<T, any>) {
 
   switch (code) {
     case 400:
-      throw new Error(
-        (parseData(res.data) as { msg: string })?.msg || "参数出错~"
-      );
+      if (typeof res.data === "string") {
+        throw new Error(res.data);
+      }
+      throw new Error((res.data as { msg: string })?.msg || "参数出错~");
     case 500:
       throw new Error("服务端错误~");
     default:

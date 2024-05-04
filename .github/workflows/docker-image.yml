@@ -27,4 +27,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: jim871939254/jim871939254/poetry_frontend
+          tags: jim871939254/poetry_frontend:latest

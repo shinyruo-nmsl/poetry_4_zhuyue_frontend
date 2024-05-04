@@ -28,3 +28,15 @@ jobs:
           context: .
           push: true
           tags: jim871939254/poetry_frontend:latest
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ALIYUN_HOST }}
+          username: ${{ secrets.ALIYUN_USER_NAME }}
+          password: ${{ secrets.ALIYUN_PASSWORD }}
+          script: |
+            docker stop poetry_frotend
+            docker rm poetry_frotend
+            docker rmi jim871939254/poetry_frontend:latest
+            docker pull jim871939254/poetry_frontend:latest 
+            docker run -d -p 8080:80/tcp --name poetry_frotend jim871939254/poetry_frontend:latest

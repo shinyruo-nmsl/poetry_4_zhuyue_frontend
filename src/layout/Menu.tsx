@@ -4,8 +4,13 @@ import type { MenuProps } from "antd";
 
 import Router from "../router";
 import { useState } from "react";
+import { useRole } from "../context/role";
 
 export default function Menu() {
+  const { role } = useRole();
+
+  const menuItems = Router.menuRoutes(role);
+
   const { pathname } = useLocation();
   const naigate = useNavigate();
 
@@ -24,7 +29,7 @@ export default function Menu() {
       defaultOpenKeys={keys}
       selectedKeys={keys}
       mode="inline"
-      items={Router.menuRoutes()}
+      items={menuItems}
       onClick={handleClickMenu}
     />
   );

@@ -13,7 +13,7 @@ const subRouter: SubRoute = {
       path: "search",
       label: "诗词检索",
       key: "poetry_search",
-      auths: ["admin", "ordinary"],
+      auths: ["admin", "ordinary", "visitor"],
       icon: <AppstoreOutlined />,
       element: <PoetrySearch />,
     },

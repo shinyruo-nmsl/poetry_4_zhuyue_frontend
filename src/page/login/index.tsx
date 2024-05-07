@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Form, Input, Tabs, message } from "antd";
 import { navigate2Pre } from "../../util/navigate";
 
-import { login } from "./service";
+import { login, regist } from "./service";
 
 import "./index.less";
 
@@ -23,7 +23,17 @@ function Login() {
       await login({ userName: loginName, password: loginPassword });
       messageApi.success("登录成功~");
       navigate2Pre();
-    } catch (err) {
+    } catch (err: any) {
+      messageApi.error(err.message);
+    }
+  };
+
+  const hanndleClickRegistComfirmButton = async () => {
+    try {
+      await regist({ userName: registName, password: registPassword });
+      messageApi.success("注册成功");
+      setCurTabIndex(0);
+    } catch (err: any) {
       messageApi.error(err.message);
     }
   };
@@ -61,7 +71,7 @@ function Login() {
             buttonText="注册"
             onInputName={setRegistName}
             onInputPassword={setRegistPassword}
-            onClickComfirmButton={() => {}}
+            onClickComfirmButton={hanndleClickRegistComfirmButton}
           />
         )}
       </div>

@@ -23,11 +23,11 @@ const router = createBrowserRouter([
 
 class Router {
   static readonly router = router;
-  static readonly subRouter = subRoutes;
+  static readonly subRouters = subRoutes;
 
-  static menuRoutes(
-    role?: Role,
-    _children: SubRoute[] = this.subRouter
+  private static _getMenuRoutes(
+    _children: SubRoute[],
+    role?: Role
   ): SubRoute[] | undefined {
     const children = _children.filter(
       (c) => !role || !c.auths || c.auths.includes(role)
@@ -38,23 +38,31 @@ class Router {
           .filter((r) => typeof r.show === "undefined" || r.show)
           .map((r) => ({
             ...r,
-            children: this.menuRoutes(role, r.children || []),
+            children: this._getMenuRoutes(r.children || [], role),
           }))
       : undefined;
   }
 
-  static search(
+  static getMenuRoutes(role?: Role) {
+    return this._getMenuRoutes(this.subRouters, role);
+  }
+
+  private static _search(
     paths: string[],
     key: "key" | "path",
-    trace: SubRoute[] = [],
-    subRoutes: SubRoute[] = this.subRouter
+    trace: SubRoute[],
+    subRoutes: SubRoute[]
   ): SubRoute[] {
     if (!paths.length) return trace;
     const path = paths[0];
     const route = subRoutes.find((r) => r[key] === path);
     if (!route) return trace;
     if (paths.length === 1 || !route.children) return [...trace, route];
-    return this.search(paths.slice(1), key, [...trace, route], route.children);
+    return this._search(paths.slice(1), key, [...trace, route], route.children);
+  }
+
+  static search(paths: string[], key: "key" | "path") {
+    return this._search(paths, key, [], this.subRouters);
   }
 }
 

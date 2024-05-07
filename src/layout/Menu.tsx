@@ -9,7 +9,7 @@ import { useRole } from "../context/role";
 export default function Menu() {
   const { role } = useRole();
 
-  const menuItems = Router.menuRoutes(role);
+  const menuItems = Router.getMenuRoutes(role);
 
   const { pathname } = useLocation();
   const naigate = useNavigate();

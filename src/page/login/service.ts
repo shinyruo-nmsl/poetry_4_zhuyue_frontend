@@ -1,6 +1,4 @@
-import qs from "qs";
-
-import { TokenUtil, request } from "../../util/http";
+import { AuthToken, request } from "../../util/http";
 import StorageUtil from "../../util/storage";
 
 export type LoginParam = {
@@ -12,10 +10,10 @@ export async function login(params: LoginParam) {
   const { token } = await request<{ token: string }>({
     method: "post",
     url: "/login/login",
-    data: qs.stringify({ ...params }),
+    data: { ...params },
   });
 
-  StorageUtil.set(TokenUtil.tokenKey, token, 24 * 60);
+  StorageUtil.set(AuthToken.tokenKey, token, 24 * 60);
 }
 
 export type RegistParam = {

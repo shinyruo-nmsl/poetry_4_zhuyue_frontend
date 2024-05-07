@@ -1,4 +1,4 @@
-FROM node:latest
+FROM --platform=linux/amd64 node:latest
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:latest
+FROM --platform=linux/amd64 nginx:latest
 
 RUN mkdir /app
 

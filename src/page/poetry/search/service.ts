@@ -1,5 +1,5 @@
-import { request } from "../../util/httpUtil";
-import { Pagination, PaginationQuery } from "../../global-type/model";
+import { request } from "../../../util/http";
+import { Pagination, PaginationQuery } from "../../../global-type/model";
 
 export interface AuthorAndKeyWordsQuery extends PaginationQuery {
   keyword1: string;
@@ -50,6 +50,18 @@ export function splitPoetryContentByKeyWords(
   const chunks = content.split(getPoetryContentPattern(keyword1, keyword2));
 
   const helper = (content: string, keyword1: string, keyword2: string) => {
+    if (!keyword1)
+      return {
+        chunks: [keyword2],
+        len: keyword2.length,
+      };
+
+    if (!keyword2)
+      return {
+        chunks: [keyword1],
+        len: keyword1.length,
+      };
+
     let start: string;
     let end: string;
     if (content.startsWith(keyword1)) {

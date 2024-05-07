@@ -1,13 +1,14 @@
 import { useCallback, useState } from "react";
 import { Input, Button } from "antd";
 
+import { withLogin } from "../../../hoc/login";
 import {
   fetchGetPoetriesByAuthorAndKeyWords,
   splitPoetryContentByKeyWords,
   PoetryPagination,
 } from "./service";
-import PaginationTable from "../../component/PaginationTable";
-import "./search.less";
+import PaginationTable from "../../../component/PaginationTable";
+import "./index.less";
 
 function PoetrySearch() {
   const [keyword1, setKeyword1] = useState("");
@@ -132,5 +133,7 @@ function PoetrySearch() {
     </div>
   );
 }
+
+const Search = withLogin(PoetrySearch);
 
 export default PoetrySearch;

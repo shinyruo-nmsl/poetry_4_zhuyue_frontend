@@ -2,7 +2,7 @@ import { AuthToken, request } from "../../util/http";
 import StorageUtil from "../../util/storage";
 
 export type LoginParam = {
-  userName: string;
+  account: string;
   password: string;
 };
 
@@ -17,7 +17,7 @@ export async function login(params: LoginParam) {
 }
 
 export type RegistParam = {
-  userName: string;
+  account: string;
   password: string;
 };
 

@@ -136,4 +136,4 @@ function PoetrySearch() {
 
 const Search = withLogin(PoetrySearch);
 
-export default PoetrySearch;
+export default Search;

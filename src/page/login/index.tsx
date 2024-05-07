@@ -20,7 +20,7 @@ function Login() {
 
   const handleClickLoginConfirmButton = async () => {
     try {
-      await login({ userName: loginName, password: loginPassword });
+      await login({ account: loginName, password: loginPassword });
       messageApi.success("登录成功~");
       navigate2Pre();
     } catch (err: any) {
@@ -30,7 +30,7 @@ function Login() {
 
   const hanndleClickRegistComfirmButton = async () => {
     try {
-      await regist({ userName: registName, password: registPassword });
+      await regist({ account: registName, password: registPassword });
       messageApi.success("注册成功");
       setCurTabIndex(0);
     } catch (err: any) {

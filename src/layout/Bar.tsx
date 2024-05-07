@@ -1,24 +1,34 @@
 import { Breadcrumb, Avatar, Popover } from "antd";
-import { UserInfo } from "../global-type/user";
+import { UserLoginInfo } from "../global-type/user";
 
 interface BarProps {
-  breadCrumbItems: { title: string }[];
-  userInfo: UserInfo;
+  routerTrace: string[];
+  userInfo: UserLoginInfo;
+  onClickChangeUserInfo: () => void;
+  onClickExitLogin: () => void;
+  onClick2Login: () => void;
 }
 
-function Bar({ breadCrumbItems, userInfo }: BarProps) {
+function Bar({
+  routerTrace,
+  userInfo,
+  onClickChangeUserInfo,
+  onClickExitLogin,
+  onClick2Login,
+}: BarProps) {
+  const breadCrumbItems = routerTrace.map((trace) => ({ title: trace }));
   const hasLogin = userInfo.role !== "visitor";
 
   const popverContent = (
     <div className="popver-content">
       {hasLogin && (
         <>
-          <p>修改信息</p>
-          <p>退出登录</p>
+          <p onClick={onClickChangeUserInfo}>修改信息</p>
+          <p onClick={onClickExitLogin}>退出登录</p>
         </>
       )}
 
-      {!hasLogin && <p>去登录</p>}
+      {!hasLogin && <p onClick={onClick2Login}>去登录</p>}
     </div>
   );
 
@@ -39,7 +49,7 @@ function Bar({ breadCrumbItems, userInfo }: BarProps) {
   );
 }
 
-function UserAvatar({ userName, avatar }: UserInfo) {
+function UserAvatar({ userName, avatar }: UserLoginInfo) {
   if (avatar) return <Avatar src={avatar} />;
   if (userName) return <Avatar>{userName[userName.length - 1]}</Avatar>;
   return <Avatar>佚</Avatar>;

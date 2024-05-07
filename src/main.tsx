@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import Router from "./router";
-import { RoleProvider } from "./context/role";
+import { UserLoginProvider } from "./context/user";
 import "./index.css";
 import { HttpEventEmitter } from "./util/http";
 import { navigate2Login } from "./util/navigate";
@@ -13,8 +13,8 @@ HttpEventEmitter.regist401Handler(() => {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RoleProvider>
+    <UserLoginProvider>
       <RouterProvider router={Router.router}></RouterProvider>
-    </RoleProvider>
+    </UserLoginProvider>
   </React.StrictMode>
 );

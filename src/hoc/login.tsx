@@ -1,9 +1,9 @@
-import { useRole } from "../context/role";
+import { useUserLoginInfo } from "../context/user";
 import { Navigate } from "react-router-dom";
 
 export function withLogin(WrappedComponent: React.ComponentType) {
   const ComponentWithLogin = () => {
-    const { role } = useRole();
+    const { role } = useUserLoginInfo();
 
     if (role === "visitor") {
       return <Navigate to="/login" replace={true}></Navigate>;

@@ -1,36 +1,21 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { Menu as _Menu } from "antd";
-import type { MenuProps } from "antd";
+import { Menu as _Menu, MenuProps as _MenuProps } from "antd";
 
-import Router from "../router";
-import { useState } from "react";
-import { useRole } from "../context/role";
+import { SubRoute } from "../global-type/router";
 
-export default function Menu() {
-  const { role } = useRole();
+interface MenuProps {
+  keys: string[];
+  menuItems?: SubRoute[];
+  onClickMenu: _MenuProps["onClick"];
+}
 
-  const menuItems = Router.getMenuRoutes(role);
-
-  const { pathname } = useLocation();
-  const naigate = useNavigate();
-
-  const [keys, setKeys] = useState(
-    Router.search(pathname.split("/").filter(Boolean), "path").map((r) => r.key)
-  );
-
-  const handleClickMenu: MenuProps["onClick"] = (e) => {
-    const trace = Router.search(e.keyPath.reverse(), "key");
-    setKeys(trace.map((r) => r.key));
-    naigate(`/${trace.map((r) => r.path).join("/")}`);
-  };
-
+export default function Menu({ keys, menuItems, onClickMenu }: MenuProps) {
   return (
     <_Menu
       defaultOpenKeys={keys}
       selectedKeys={keys}
       mode="inline"
       items={menuItems}
-      onClick={handleClickMenu}
+      onClick={onClickMenu}
     />
   );
 }

@@ -5,7 +5,7 @@ import { PoetrySearch } from "../page/poetry";
 
 const subRouter: SubRoute = {
   path: "poetry",
-  label: "诗词接花",
+  label: "诗词接花令",
   key: "poetry",
   icon: <MailOutlined />,
   children: [

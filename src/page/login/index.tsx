@@ -23,7 +23,7 @@ function Login() {
       await login({ userName: loginName, password: loginPassword });
       messageApi.success("登录成功~");
       navigate2Pre();
-    } catch (err) {
+    } catch (err: any) {
       messageApi.error(err.message);
     }
   };

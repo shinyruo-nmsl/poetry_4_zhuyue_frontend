@@ -1,5 +1,7 @@
-import { Breadcrumb, Avatar, Popover } from "antd";
-import { UserLoginInfo } from "../global-type/user";
+import { Breadcrumb, Avatar, Popover, Dropdown, MenuProps } from "antd";
+import { UserLoginInfo } from "../../global-type/user";
+
+import "./bar.less";
 
 interface BarProps {
   routerTrace: string[];
@@ -19,31 +21,32 @@ function Bar({
   const breadCrumbItems = routerTrace.map((trace) => ({ title: trace }));
   const hasLogin = userInfo.role !== "visitor";
 
-  const popverContent = (
-    <div className="popver-content">
-      {hasLogin && (
-        <>
-          <p onClick={onClickChangeUserInfo}>修改信息</p>
-          <p onClick={onClickExitLogin}>退出登录</p>
-        </>
-      )}
-
-      {!hasLogin && <p onClick={onClick2Login}>去登录</p>}
-    </div>
-  );
+  const items: MenuProps["items"] = hasLogin
+    ? [
+        {
+          key: "1",
+          label: <p onClick={onClickChangeUserInfo}>修改信息</p>,
+        },
+        {
+          key: "2",
+          label: <p onClick={onClickExitLogin}>退出登录</p>,
+        },
+      ]
+    : [
+        {
+          key: "1",
+          label: <p onClick={onClick2Login}>去登录</p>,
+        },
+      ];
 
   return (
     <div className="layout-bar">
       <Breadcrumb items={breadCrumbItems} />
 
       <div className="user-info">
-        <Popover
-          content={popverContent}
-          placement="bottomRight"
-          trigger="hover"
-        >
+        <Dropdown menu={{ items }} placement="bottomRight">
           <UserAvatar {...userInfo} />
-        </Popover>
+        </Dropdown>
       </div>
     </div>
   );

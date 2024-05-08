@@ -18,13 +18,15 @@ export default function Layout() {
   const { pathname } = useLocation();
   const naigate = useNavigate();
 
-  const [keys, setKeys] = useState(
-    Router.search(pathname.split("/").filter(Boolean), "path").map((r) => r.key)
+  const [trace, setTrace] = useState(
+    Router.search(pathname.split("/").filter(Boolean), "path")
   );
+  const keys = trace.map((r) => r.key);
+  const paths = trace.map((r) => r.label);
 
   const handleClickMenu: MenuProps["onClick"] = (e) => {
     const trace = Router.search(e.keyPath.reverse(), "key");
-    setKeys(trace.map((r) => r.key));
+    setTrace(trace);
     naigate(`/${trace.map((r) => r.path).join("/")}`);
   };
 
@@ -38,13 +40,15 @@ export default function Layout() {
       </div>
       <div className="main">
         <Bar
-          routerTrace={keys}
+          routerTrace={paths}
           userInfo={userInfo}
           onClickChangeUserInfo={() => {}}
           onClick2Login={() => naigate("/login")}
           onClickExitLogin={() => {}}
         />
-        <Outlet />
+        <div className="content">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

@@ -22,6 +22,8 @@ export function UserLoginProvider({ children }: { children: ReactElement }) {
     account: "",
   });
 
+  console.log(userLoginInfo);
+
   useEffect(() => {
     fetchGetUserLoginInfo().then((info) => {
       setUserLoginInfo(info);

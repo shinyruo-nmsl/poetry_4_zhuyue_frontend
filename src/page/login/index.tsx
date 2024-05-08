@@ -5,8 +5,11 @@ import { navigate2Pre } from "../../util/navigate";
 import { login, regist } from "./service";
 
 import "./index.less";
+import { useUserLoginDispatch } from "../../context/user";
 
 function Login() {
+  const loginDispatch = useUserLoginDispatch();
+
   const tabs = ["登录", "注册"];
   const [curTabIndex, setCurTabIndex] = useState(0);
 
@@ -22,6 +25,7 @@ function Login() {
     try {
       await login({ account: loginName, password: loginPassword });
       messageApi.success("登录成功~");
+      await loginDispatch({ type: "refresh" });
       navigate2Pre();
     } catch (err: any) {
       messageApi.error(err.message);

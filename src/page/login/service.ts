@@ -1,5 +1,4 @@
 import { AuthToken, request } from "../../util/http";
-import StorageUtil from "../../util/storage";
 
 export type LoginParam = {
   account: string;
@@ -13,7 +12,7 @@ export async function login(params: LoginParam) {
     data: { ...params },
   });
 
-  StorageUtil.set(AuthToken.tokenKey, token, 24 * 60);
+  AuthToken.setToken(token);
 }
 
 export type RegistParam = {

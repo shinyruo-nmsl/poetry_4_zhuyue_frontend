@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
 import { Input, Button } from "antd";
-
-import { withLogin } from "../../../hoc/login";
 import {
   fetchGetPoetriesByAuthorAndKeyWords,
   splitPoetryContentByKeyWords,
@@ -16,7 +14,7 @@ function PoetrySearch() {
   const [author, setAuthor] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
 
   const [poetryPagination, setPoetryPagination] = useState<PoetryPagination>();
 
@@ -123,7 +121,7 @@ function PoetrySearch() {
         tableProps={{
           columns: tableColumns,
           rowKey: (row) => row.id,
-          scroll: { y: 600 },
+          scroll: { y: 500 },
         }}
         paginationData={poetryPagination}
         pageNo={pageNo}
@@ -134,6 +132,4 @@ function PoetrySearch() {
   );
 }
 
-const Search = withLogin(PoetrySearch);
-
-export default Search;
+export default PoetrySearch;

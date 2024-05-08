@@ -21,7 +21,7 @@ export default class StorageUtil {
         const item: Item = JSON.parse(itemStr);
 
         if (this.isExpired(item.expireAt)) {
-          localStorage.removeItem(key);
+          this.remove(key);
         } else {
           return item.value;
         }
@@ -31,6 +31,10 @@ export default class StorageUtil {
     } catch {
       return null;
     }
+  }
+
+  public static remove(key: string) {
+    localStorage.removeItem(key);
   }
 
   public static isExpired(expireAt: number) {

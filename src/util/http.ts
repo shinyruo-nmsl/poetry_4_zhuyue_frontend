@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { HttpMethod } from "../global-type/http";
+import { HttpMethod, HttpEventType } from "../global-type/http";
 import StorageUtil from "./storage";
 import { EventEmitter } from "./event";
 
@@ -42,8 +42,8 @@ function handleResponse<T>(res: AxiosResponse<T, any>) {
     case 400:
       throw new Error((res.data as { msg: string })?.msg || "参数出错~");
     case 401:
-      HttpEventEmitter.trigger401Handler();
-      throw new Error((res.data as { msg: string })?.msg || "权限错误~");
+      HttpEventEmitter.triggerHandler("code_401");
+      throw new Error((res.data as { msg: string })?.msg || "暂未登录~");
     case 500:
       throw new Error((res.data as { msg: string })?.msg || "服务端错误~");
     default:
@@ -63,16 +63,29 @@ export class AuthToken {
 
     return this._token;
   }
+
+  static setToken(token: string) {
+    StorageUtil.set(this.tokenKey, token, 24 * 60 * 60);
+  }
+
+  static remove() {
+    StorageUtil.remove(this.tokenKey);
+    this._token = null;
+  }
 }
 
 export class HttpEventEmitter {
   private static eventEmitter = new EventEmitter();
 
-  static regist401Handler(handler: (...args: any[]) => void) {
-    this.eventEmitter.on("code_401", handler);
+  static registHandler(type: HttpEventType, handler: (...args: any[]) => void) {
+    this.eventEmitter.on(type, handler);
   }
 
-  static trigger401Handler() {
-    this.eventEmitter.fire("code_401");
+  static triggerHandler(type: HttpEventType) {
+    this.eventEmitter.fire(type);
+  }
+
+  static removeHandler(type: HttpEventType, handler: (...args: any[]) => void) {
+    this.eventEmitter.remove(type, handler);
   }
 }

@@ -42,8 +42,10 @@ export default function Layout() {
     message.info("退出成功~");
   };
 
-  const handleComfirmChangeUserInfo = (info: UserLoginDisplayInfo) => {
-    loginDispatch({ type: "update_display_info", userInfo: info });
+  const handleComfirmChangeUserInfo = async (info: UserLoginDisplayInfo) => {
+    await loginDispatch({ type: "update_display_info", userInfo: info });
+    message.success("修改成功~");
+    setUserInfoDialogVisible(false);
   };
 
   return (
@@ -64,6 +66,7 @@ export default function Layout() {
           <UserInfoDialog
             visible={userInfoDialogVisible}
             userName={userInfo.userName}
+            role={userInfo.role}
             avatar={userInfo.avatar}
             onCloseModal={() => setUserInfoDialogVisible(false)}
             onConfirm={handleComfirmChangeUserInfo}

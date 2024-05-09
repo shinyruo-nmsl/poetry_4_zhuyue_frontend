@@ -5,7 +5,7 @@ function UserAvatar({
   userName,
   avatar,
   ...avatarProps
-}: UserLoginDisplayInfo & AvatarProps) {
+}: Omit<UserLoginDisplayInfo, "role"> & AvatarProps) {
   if (avatar) return <Avatar {...avatarProps} src={avatar} />;
   if (userName)
     return <Avatar {...avatarProps}>{userName[userName.length - 1]}</Avatar>;

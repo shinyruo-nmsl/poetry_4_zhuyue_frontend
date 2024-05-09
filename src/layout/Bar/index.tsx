@@ -47,7 +47,7 @@ function Bar({
       <div className="user-info">
         <Dropdown menu={{ items }} placement="bottomRight">
           <div className="avatar-wrapper">
-            <UserAvatar {...userInfo} />
+            <UserAvatar userName={userInfo.userName} avatar={userInfo.avatar} />
           </div>
         </Dropdown>
       </div>

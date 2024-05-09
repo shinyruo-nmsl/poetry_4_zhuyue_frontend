@@ -3,7 +3,7 @@ import { UploadOutlined, UserOutlined } from "@ant-design/icons";
 import { UserLoginDisplayInfo } from "../../global-type/user";
 import UserAvatar from "../../component/UserAvatar";
 import { useState } from "react";
-import { convertImgFile2Base64 } from "../../util/file";
+import { formatUserRole } from "../../service/user";
 
 interface UserInfoDialogProps extends UserLoginDisplayInfo {
   visible: boolean;
@@ -35,17 +35,13 @@ function UserInfoDialog({
     const file = uploadFile.originFileObj!;
 
     if (uploadFile.status === "uploading") {
-      //   const base64 = await convertImgFile2Base64(file);
-      //   const url = URL.createObjectURL(
-      //     new Blob([base64], { type: "image/png" })
-      //   );
       const url = URL.createObjectURL(file);
       setAvatar(url);
     }
   };
 
   const handleClickConfirmButton = () => {
-    onConfirm({ userName: _userName, avatar: _avatar });
+    onConfirm({ userName: _userName, avatar: _avatar, role });
   };
 
   return (
@@ -86,9 +82,16 @@ function UserInfoDialog({
           <Input
             size="large"
             placeholder="请输入您的昵称~"
-            prefix={<UserOutlined />}
             value={_userName}
             onChange={(e) => setUserName(e.target.value)}
+          />
+        </Form.Item>
+        <Form.Item label="角色">
+          <Input
+            size="large"
+            disabled
+            prefix={<UserOutlined />}
+            value={formatUserRole(role)}
           />
         </Form.Item>
       </Form>

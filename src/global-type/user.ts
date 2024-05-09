@@ -8,7 +8,11 @@ export type UserLoginInfo = {
   avatar?: string;
 };
 
-export type UserLoginDisplayInfo = { userName?: string; avatar?: string };
+export type UserLoginDisplayInfo = {
+  userName?: string;
+  avatar?: string;
+  role: Role;
+};
 
 export type UserLoginDispatch = (
   action:

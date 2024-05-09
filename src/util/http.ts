@@ -29,10 +29,12 @@ export async function request<T>(
 export function sseRequest<D, P extends Record<string, string | number>>(
   url: string,
   query: P,
-  messageCall: (data: D) => void
+  messageCall: (data: D, close: () => void) => void,
+  option?: EventSourceInit
 ) {
   const eventSource = new EventSource(
-    `${import.meta.env.VITE_APP_BASE_API}${url}${buildUrlQuery(query)}`
+    `${import.meta.env.VITE_APP_BASE_API}${url}${buildUrlQuery(query)}`,
+    option
   );
 
   const { promise, resolve, reject } = createPromiseResolvers<
@@ -41,15 +43,16 @@ export function sseRequest<D, P extends Record<string, string | number>>(
   >();
 
   eventSource.addEventListener("message", (event) => {
-    messageCall(event.data as D);
+    messageCall(JSON.parse(event.data) as D, () => {
+      console.log("关闭");
+      eventSource.close();
+      resolve(undefined);
+    });
   });
 
   eventSource.addEventListener("error", (error) => {
+    eventSource.close();
     reject(error);
-  });
-
-  eventSource.addEventListener("close", () => {
-    resolve(undefined);
   });
 
   return promise;

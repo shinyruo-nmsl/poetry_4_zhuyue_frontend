@@ -1,6 +1,9 @@
 import { sseRequest } from "../../../util/http";
 
-export function gptTest(prompt: string, call: (data: string) => void) {
+export function gptTest(
+  prompt: string,
+  call: (data: { data: string; done: boolean }, close: () => void) => void
+) {
   return sseRequest("/ai/gpttest", { prompt }, call);
 }
 

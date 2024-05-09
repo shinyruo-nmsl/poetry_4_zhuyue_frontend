@@ -3,9 +3,13 @@ import { gptTest, gptTest2 } from "./service";
 
 function AIChat() {
   const chat = async () => {
-    await gptTest("", (data) => {
+    await gptTest("", (data, close) => {
       console.log("Received data:", data);
+      if (data.done) {
+        close();
+      }
     });
+    console.log("结束会话");
     message.success("结束会话");
   };
 
@@ -34,7 +38,7 @@ function AIChat() {
     });
   };
 
-  return <Button onClick={chat2}>promot</Button>;
+  return <Button onClick={chat}>promot</Button>;
 }
 
 export default AIChat;

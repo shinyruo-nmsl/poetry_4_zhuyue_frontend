@@ -1,29 +1,26 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import { SubRoute } from "../global-type/router";
-import App from "../App";
-import { Login } from "../page/login";
-
-import PoetryRouter from "./poetry";
 import { Role } from "../global-type/user";
+import App from "../App";
 
-const subRoutes: SubRoute[] = [PoetryRouter];
-
-const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/",
-    element: <App />,
-    children: subRoutes,
-  },
-]);
+import { Login } from "../page/login";
+import PoetryRouter from "./poetry";
+import ToolRouter from "./tool";
 
 class Router {
-  static readonly router = router;
-  static readonly subRouters = subRoutes;
+  static readonly subRouters = [PoetryRouter, ToolRouter];
+  static readonly router = createBrowserRouter([
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/",
+      element: <App />,
+      children: this.subRouters,
+    },
+  ]);
 
   private static _getMenuRoutes(
     _children: SubRoute[],

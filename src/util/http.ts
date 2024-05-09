@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { HttpMethod, HttpEventType } from "../global-type/http";
 import StorageUtil from "./storage";
 import { EventEmitter } from "./event";
+import { createPromiseResolvers } from "./tool";
 
 export async function request<T>(
   config: AxiosRequestConfig & { method: HttpMethod }
@@ -23,6 +24,42 @@ export async function request<T>(
   });
 
   return handleResponse(res);
+}
+
+export function sseRequest<D, P extends Record<string, string | number>>(
+  url: string,
+  query: P,
+  messageCall: (data: D) => void
+) {
+  const eventSource = new EventSource(
+    `${import.meta.env.VITE_APP_BASE_API}${url}${buildUrlQuery(query)}`
+  );
+
+  const { promise, resolve, reject } = createPromiseResolvers<
+    undefined,
+    Event
+  >();
+
+  eventSource.addEventListener("message", (event) => {
+    messageCall(event.data as D);
+  });
+
+  eventSource.addEventListener("error", (error) => {
+    reject(error);
+  });
+
+  eventSource.addEventListener("close", () => {
+    resolve(undefined);
+  });
+
+  return promise;
+}
+
+function buildUrlQuery(query: Record<string, string | number>) {
+  const keys = Object.keys(query);
+
+  if (keys.length < 1) return "";
+  return "?" + keys.map((k) => `${k}=${query[k]}`).join("&");
 }
 
 function appendToken(headers: any) {

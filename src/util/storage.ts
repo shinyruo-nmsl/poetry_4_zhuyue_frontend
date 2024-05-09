@@ -1,8 +1,3 @@
-interface Item {
-  value: string;
-  expireAt: number;
-}
-
 export default class StorageUtil {
   public static set(key: string, value: string, ttl: number) {
     const item = {
@@ -18,7 +13,10 @@ export default class StorageUtil {
       const itemStr = localStorage.getItem(key);
 
       if (itemStr) {
-        const item: Item = JSON.parse(itemStr);
+        const item: {
+          value: string;
+          expireAt: number;
+        } = JSON.parse(itemStr);
 
         if (this.isExpired(item.expireAt)) {
           this.remove(key);

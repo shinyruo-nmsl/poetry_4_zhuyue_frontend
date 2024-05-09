@@ -1,17 +1,16 @@
-import { Outlet } from "react-router-dom";
-import { AppleOutlined } from "@ant-design/icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MenuProps, message } from "antd";
+import { useState } from "react";
 
 import Router from "../router";
-import { useState } from "react";
+import { UserLoginDisplayInfo } from "../global-type/user";
 import { useUserLoginInfo, useUserLoginDispatch } from "../context/user";
 
 import Menu from "./Menu";
 import Bar from "./Bar";
 import UserInfoDialog from "./UserInfoDialog";
+
 import "./layout.less";
-import { UserLoginDisplayInfo } from "../global-type/user";
 
 export default function Layout() {
   const userInfo = useUserLoginInfo();
@@ -26,7 +25,7 @@ export default function Layout() {
     Router.search(pathname.split("/").filter(Boolean), "path")
   );
   const keys = trace.map((r) => r.key);
-  const paths = trace.map((r) => r.label);
+  const labels = trace.map((r) => r.label);
 
   const handleClickMenu: MenuProps["onClick"] = (e) => {
     const trace = Router.search(e.keyPath.reverse(), "key");
@@ -56,7 +55,7 @@ export default function Layout() {
       </div>
       <div className="main">
         <Bar
-          routerTrace={paths}
+          routerTrace={labels}
           userInfo={userInfo}
           onClickChangeUserInfoMenu={() => setUserInfoDialogVisible(true)}
           onClick2LoginMenu={() => naigate("/login")}

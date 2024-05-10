@@ -26,36 +26,80 @@ export async function request<T>(
   return handleResponse(res);
 }
 
-export function sseRequest<D, P extends Record<string, string | number>>(
+export function sseRequest<V, P extends Record<string, string | number>>(
   url: string,
   query: P,
-  messageCall: (data: D, close: () => void) => void,
-  option?: EventSourceInit
+  option: EventSourceInit = { withCredentials: false }
 ) {
   const eventSource = new EventSource(
     `${import.meta.env.VITE_APP_BASE_API}${url}${buildUrlQuery(query)}`,
     option
   );
 
-  const { promise, resolve, reject } = createPromiseResolvers<
-    undefined,
-    Event
-  >();
+  type Iterator = { value: V; done: boolean };
+
+  let p = createPromiseResolvers<Iterator, Event>();
 
   eventSource.addEventListener("message", (event) => {
-    messageCall(JSON.parse(event.data) as D, () => {
-      console.log("关闭");
-      eventSource.close();
-      resolve(undefined);
-    });
+    p.resolve(JSON.parse(event.data) as Iterator);
   });
 
   eventSource.addEventListener("error", (error) => {
-    eventSource.close();
-    reject(error);
+    p.reject(error);
   });
 
-  return promise;
+  const stream = {
+    async next() {
+      const { value, done } = await p.promise;
+      if (!done) {
+        p = createPromiseResolvers();
+        return { value, done };
+      }
+      return { value, done };
+    },
+
+    [Symbol.asyncIterator]() {
+      return this;
+    },
+  };
+
+  return stream;
+}
+
+export async function fetchStreamRequest<
+  P extends Record<string, string | number>,
+>(url: string, query: P) {
+  const response = await fetch(
+    `${import.meta.env.VITE_APP_BASE_API}${url}${buildUrlQuery(query)}`,
+    {
+      method: "get",
+      headers: {
+        "Content-Type": "text/event-stream",
+      },
+    }
+  );
+
+  // const reader = handleResponse({
+  //   status: response.status,
+  //   data: response.body!.getReader(),
+  // });
+
+  const reader = response.body!.getReader();
+
+  const stream = {
+    async next() {
+      const { done, value } = await reader.read();
+      const decoder = new TextDecoder();
+      const text = decoder.decode(value);
+      return { done, value: text };
+    },
+
+    [Symbol.asyncIterator]() {
+      return this;
+    },
+  };
+
+  return stream;
 }
 
 function buildUrlQuery(query: Record<string, string | number>) {
@@ -75,7 +119,7 @@ function appendToken(headers: any) {
   return headers;
 }
 
-function handleResponse<T>(res: AxiosResponse<T, any>) {
+function handleResponse<T>(res: { status: number; data: T }) {
   const code = res.status;
 
   switch (code) {

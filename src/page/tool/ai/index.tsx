@@ -13,32 +13,18 @@ function AIChat() {
     message.success("结束会话");
   };
 
-  const chat2 = () => {
-    const eventSource = gptTest2();
-
-    eventSource.addEventListener("message", (event) => {
-      const data = event.data;
-      console.log("Received data:", event);
-      if (!data) {
-        console.log("关闭");
-        eventSource.close();
+  const chat2 = async () => {
+    const stream = await gptTest2("");
+    try {
+      for await (const chunk of stream) {
+        console.log("chunk", chunk);
       }
-    });
-
-    eventSource.addEventListener("error", (error) => {
-      console.error("Error occurred:", error);
-    });
-
-    eventSource.addEventListener("open", () => {
-      console.log("Connection opened");
-    });
-
-    eventSource.addEventListener("close", () => {
-      console.log("Connection closed");
-    });
+    } catch (err) {
+      console.log("err", err);
+    }
   };
 
-  return <Button onClick={chat}>promot</Button>;
+  return <Button onClick={chat2}>promot</Button>;
 }
 
 export default AIChat;

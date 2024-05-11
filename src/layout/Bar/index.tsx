@@ -1,6 +1,6 @@
 import { Breadcrumb, Dropdown, MenuProps } from "antd";
 import { UserLoginInfo } from "../../global-type/user";
-import UserAvatar from "../../component/UserAvatar";
+import { UserAvatar } from "../../component/Avatar";
 
 import "./bar.less";
 
@@ -47,7 +47,7 @@ function Bar({
       <div className="user-info">
         <Dropdown menu={{ items }} placement="bottomRight">
           <div className="avatar-wrapper">
-            <UserAvatar userName={userInfo.userName} avatar={userInfo.avatar} />
+            <UserAvatar />
           </div>
         </Dropdown>
       </div>

@@ -135,4 +135,4 @@ function BaseForm({
   );
 }
 
-export { Login };
+export default Login;

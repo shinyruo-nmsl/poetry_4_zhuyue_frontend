@@ -5,6 +5,7 @@ import { ExclamationCircleFilled } from "@ant-design/icons";
 
 import Layout from "./layout";
 import { HttpEventEmitter } from "./util/http";
+
 import "./App.css";
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
     return () => HttpEventEmitter.removeHandler("code_401", handler);
   });
 
-  return <Layout></Layout>;
+  return <Layout />;
 }
 
 export default App;

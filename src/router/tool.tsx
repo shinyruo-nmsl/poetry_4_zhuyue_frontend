@@ -11,7 +11,7 @@ const subRouter: SubRoute = {
   children: [
     {
       path: "ai",
-      label: "gpt",
+      label: "ChatGPT",
       key: "tool_ai",
       icon: <AppstoreOutlined />,
       element: <AIChat />,

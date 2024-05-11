@@ -26,11 +26,10 @@ export async function request<T>(
   return handleResponse(res);
 }
 
-export function sseRequest<V, P extends Record<string, string | number>>(
-  url: string,
-  query: P,
-  option: EventSourceInit = { withCredentials: false }
-) {
+export function createEventSourceStream<
+  V,
+  P extends Record<string, string | number>,
+>(url: string, query: P, option: EventSourceInit = { withCredentials: false }) {
   const eventSource = new EventSource(
     `${import.meta.env.VITE_APP_BASE_API}${url}${buildUrlQuery(query)}`,
     option
@@ -66,7 +65,7 @@ export function sseRequest<V, P extends Record<string, string | number>>(
   return stream;
 }
 
-export async function fetchStreamRequest<
+export async function createFetchStream<
   P extends Record<string, string | number>,
 >(url: string, query: P, headers = {}) {
   const response = await fetch(

@@ -1,3 +1,3 @@
-import AIChat from "./ai";
+import AIChat from "./chatGPT";
 
 export { AIChat };

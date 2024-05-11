@@ -1,7 +1,7 @@
 import { Modal, Form, Upload, Button, Input, message, UploadFile } from "antd";
 import { UploadOutlined, UserOutlined } from "@ant-design/icons";
 import { UserLoginDisplayInfo } from "../../global-type/user";
-import UserAvatar from "../../component/UserAvatar";
+import { CharacterAvatar } from "../../component/Avatar";
 import { useState } from "react";
 import { formatUserRole } from "../../service/user";
 
@@ -64,7 +64,11 @@ function UserInfoDialog({
             className="avatar-form-item"
             style={{ display: "flex", alignItems: "flex-end", gap: "5px" }}
           >
-            <UserAvatar userName={_userName} avatar={_avatar} size={50} />
+            <CharacterAvatar
+              characterName={_userName}
+              avatar={_avatar}
+              size={50}
+            />
             <Upload
               accept="image/png, image/jpeg"
               beforeUpload={handleBeforeUploadAvatar}

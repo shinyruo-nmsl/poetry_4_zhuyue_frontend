@@ -68,23 +68,22 @@ export function sseRequest<V, P extends Record<string, string | number>>(
 
 export async function fetchStreamRequest<
   P extends Record<string, string | number>,
->(url: string, query: P) {
+>(url: string, query: P, headers = {}) {
   const response = await fetch(
     `${import.meta.env.VITE_APP_BASE_API}${url}${buildUrlQuery(query)}`,
     {
       method: "get",
       headers: {
         "Content-Type": "text/event-stream",
+        ...appendToken(headers),
       },
     }
   );
 
-  // const reader = handleResponse({
-  //   status: response.status,
-  //   data: response.body!.getReader(),
-  // });
-
-  const reader = response.body!.getReader();
+  const reader = handleResponse({
+    status: response.status,
+    data: response.body!.getReader(),
+  });
 
   const stream = {
     async next() {

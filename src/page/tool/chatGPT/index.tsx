@@ -1,24 +1,79 @@
-import { Button, message } from "antd";
-import { gptTest2 } from "./service";
+import { Divider, Input, message } from "antd";
+import { fetchPostPromotMessage } from "./service";
+import { useLayoutEffect, useRef, useState } from "react";
 
-function AIChat() {
-  const handleClickChatButton = async () => {
+import MessageBox, { Message } from "./component/Message";
+
+import "./index.less";
+
+function ChatGPT() {
+  const [prompt, setPrompt] = useState("");
+  const [messages, setMessages] = useState<Message[]>([
+    { role: "gpt", content: "我是您的AI助手，欢迎提问👏🏻" },
+  ]);
+  const [isPending, setIsPending] = useState(false);
+  const messagesRef = useRef<HTMLDivElement>(null);
+
+  const { TextArea } = Input;
+
+  const handleEnterEditInput = async () => {
+    if (prompt.length < 1 || isPending) return;
+    setIsPending(true);
+    setPrompt("");
+    setMessages((messages: Message[]) => [
+      ...messages,
+      { role: "user", content: prompt },
+    ]);
+
     try {
-      const stream = await gptTest2("");
+      const stream = await fetchPostPromotMessage(prompt);
+      setMessages((messages: Message[]) => [
+        ...messages,
+        { role: "gpt", content: "" },
+      ]);
       for await (const chunk of stream) {
-        console.log("chunk", chunk);
+        setMessages((messages: Message[]) => {
+          const gptMessage = messages[messages.length - 1];
+          return [
+            ...messages.slice(0, messages.length - 1),
+            { ...gptMessage, content: gptMessage.content + chunk },
+          ];
+        });
       }
     } catch (err: any) {
       message.error(err.message);
+    } finally {
+      setIsPending(false);
     }
   };
 
+  useLayoutEffect(() => {
+    if (messagesRef.current) {
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <div className="ai-chat-page">
-      <div className="message-container"></div>
-      <div className="edit-container"></div>
+      <div className="message-container" ref={messagesRef}>
+        {messages.map((message, index) => (
+          <MessageBox key={index} message={message} />
+        ))}
+      </div>
+      <Divider />
+      <div className="edit-container">
+        <TextArea
+          value={prompt}
+          disabled={isPending}
+          maxLength={600}
+          onChange={(e) => setPrompt(e.target.value)}
+          onPressEnter={handleEnterEditInput}
+          placeholder="请输入问题"
+          style={{ height: 120, resize: "none" }}
+        />
+      </div>
     </div>
   );
 }
 
-export default AIChat;
+export default ChatGPT;

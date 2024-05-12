@@ -3,6 +3,7 @@ export function navigate2Login() {
 }
 
 export function navigate2Pre() {
+  console.log(history.length);
   if (history.length <= 2) {
     location.href = location.origin;
   } else {

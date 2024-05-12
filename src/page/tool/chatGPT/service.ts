@@ -1,5 +1,5 @@
 import { createFetchStream } from "../../../util/http";
 
-export function gptTest2(prompt: string) {
+export function fetchPostPromotMessage(prompt: string) {
   return createFetchStream("/ai/gptContent", { prompt });
 }

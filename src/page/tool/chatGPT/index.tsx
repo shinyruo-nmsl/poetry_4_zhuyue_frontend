@@ -1,7 +1,7 @@
+import { useLayoutEffect, useRef, useState, KeyboardEvent } from "react";
 import { Divider, Input, message } from "antd";
-import { fetchPostPromotMessage } from "./service";
-import { useLayoutEffect, useRef, useState } from "react";
 
+import { fetchPostPromotMessage } from "./service";
 import MessageBox, { Message } from "./component/Message";
 
 import "./index.less";
@@ -16,8 +16,10 @@ function ChatGPT() {
 
   const { TextArea } = Input;
 
-  const handleEnterEditInput = async () => {
-    if (prompt.length < 1 || isPending) return;
+  const handleEnterEditInput = async (
+    e: KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (e.keyCode === 229 || prompt.length < 1 || isPending) return;
     setIsPending(true);
     setPrompt("");
     setMessages((messages: Message[]) => [
@@ -67,7 +69,7 @@ function ChatGPT() {
           disabled={isPending}
           maxLength={600}
           onChange={(e) => setPrompt(e.target.value)}
-          onPressEnter={handleEnterEditInput}
+          onPressEnter={(e) => handleEnterEditInput(e)}
           placeholder="请输入问题"
           style={{ height: 120, resize: "none" }}
         />

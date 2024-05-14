@@ -11,20 +11,27 @@ export interface Message {
   content: string;
 }
 
+const getCodeTemplate = (code: string) => {
+  return `<div class="hl-code">
+            <div class="hl-code-header"></div>
+            <div class="hljs">
+              <code>${code}</code>
+            </div>
+          </div>`;
+};
+
 const markdown: MarkDown = MarkDown({
   highlight: function (str: string, lang: string) {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return `<div class="hl-code"><div class="hl-code-header"><span>${lang}</span></div><div class="hljs"><code>${
+        return getCodeTemplate(
           hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
-        }</code></div></div>`;
+        );
       } catch (err) {
         console.log(err);
       }
     }
-    return `<div class="hl-code"><div class="hl-code-header"><span>${lang}</span></div><div class="hljs"><code>${markdown.utils.escapeHtml(
-      str
-    )}</code></div></div>`;
+    return getCodeTemplate(markdown.utils.escapeHtml(str));
   },
 });
 

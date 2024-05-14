@@ -22,6 +22,14 @@ function Login() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleClickLoginConfirmButton = async () => {
+    if (!loginName) {
+      message.error("用户名为空~");
+      return;
+    }
+    if (!loginPassword) {
+      message.error("密码为空~");
+      return;
+    }
     try {
       await login({ account: loginName, password: loginPassword });
       messageApi.success("登录成功~");
@@ -33,6 +41,14 @@ function Login() {
   };
 
   const hanndleClickRegistComfirmButton = async () => {
+    if (!registName) {
+      message.error("用户名为空~");
+      return;
+    }
+    if (!registPassword) {
+      message.error("密码为空~");
+      return;
+    }
     try {
       await regist({ account: registName, password: registPassword });
       messageApi.success("注册成功");
@@ -112,7 +128,11 @@ function BaseForm({
         name="username"
         rules={[{ required: true, message: "Please input your username!" }]}
       >
-        <Input value={name} onChange={(e) => onInputName(e.target.value)} />
+        <Input
+          value={name}
+          maxLength={20}
+          onChange={(e) => onInputName(e.target.value)}
+        />
       </Form.Item>
 
       <Form.Item
@@ -122,6 +142,7 @@ function BaseForm({
       >
         <Input.Password
           value={password}
+          maxLength={20}
           onChange={(e) => onInputPassword(e.target.value)}
         />
       </Form.Item>

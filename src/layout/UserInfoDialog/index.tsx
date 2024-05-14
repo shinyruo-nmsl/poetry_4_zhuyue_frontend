@@ -41,6 +41,10 @@ function UserInfoDialog({
   };
 
   const handleClickConfirmButton = () => {
+    if (!_userName) {
+      message.error("昵称为空~");
+      return;
+    }
     onConfirm({ userName: _userName, avatar: _avatar, role });
   };
 
@@ -69,7 +73,7 @@ function UserInfoDialog({
               avatar={_avatar}
               size={50}
             />
-            <Upload
+            {/* <Upload
               accept="image/png, image/jpeg"
               beforeUpload={handleBeforeUploadAvatar}
               customRequest={() => {}}
@@ -79,7 +83,7 @@ function UserInfoDialog({
               <Button size="small" icon={<UploadOutlined />}>
                 点击上传
               </Button>
-            </Upload>
+            </Upload> */}
           </div>
         </Form.Item>
         <Form.Item label="用户昵称">
@@ -87,6 +91,7 @@ function UserInfoDialog({
             size="large"
             placeholder="请输入您的昵称~"
             value={_userName}
+            maxLength={10}
             onChange={(e) => setUserName(e.target.value)}
           />
         </Form.Item>

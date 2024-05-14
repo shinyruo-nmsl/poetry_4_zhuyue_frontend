@@ -1,17 +1,19 @@
-interface IOnceHandler {
+interface OnceHandler {
   once?: boolean;
   (...params: any[]): void;
 }
 
+type Listener = [string, (...params: any[]) => void | OnceHandler];
+
 export class EventEmitter {
-  public listeners: [string, (...params: any[]) => void | IOnceHandler][] = [];
+  private listeners: Listener[] = [];
 
   on(_type: string, _handler: (...params: any[]) => void) {
     this.listeners.push([_type, _handler]);
   }
 
   once(_type: string, _handler: (...params: any[]) => void) {
-    const wrapper: IOnceHandler = (..._params: any[]) => {
+    const wrapper: OnceHandler = (..._params: any[]) => {
       _handler(..._params);
 
       this.remove(_type, wrapper);
@@ -32,7 +34,7 @@ export class EventEmitter {
     const index = this.listeners.findIndex(
       (listener) =>
         listener[0] === _type &&
-        (listener[1] === _handler || !!(listener[1] as IOnceHandler).once)
+        (listener[1] === _handler || !!(listener[1] as OnceHandler).once)
     );
 
     if (index !== -1) {

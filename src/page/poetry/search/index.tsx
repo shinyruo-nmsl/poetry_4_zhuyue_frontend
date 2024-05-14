@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Input, Button } from "antd";
+import { Input, Button, message } from "antd";
 import {
   fetchGetPoetriesByAuthorAndKeyWords,
   splitPoetryContentByKeyWords,
@@ -76,6 +76,10 @@ function PoetrySearch() {
   };
 
   const handleClickSearchButton = async () => {
+    if (!author && !keyword1 && !keyword2) {
+      message.error("请输入搜索信息~");
+      return;
+    }
     setPageNo(0);
     const data = await fetchGetPoetriesByAuthorAndKeyWords({
       pageNo: 0,
@@ -95,6 +99,7 @@ function PoetrySearch() {
           <Input
             placeholder="请输入作者"
             value={author}
+            maxLength={20}
             onChange={(e) => setAuthor(e.target.value)}
           ></Input>
         </div>
@@ -103,6 +108,7 @@ function PoetrySearch() {
           <Input
             placeholder="请输入关键词"
             value={keyword1}
+            maxLength={20}
             onChange={(e) => setKeyword1(e.target.value)}
           ></Input>
         </div>
@@ -111,6 +117,7 @@ function PoetrySearch() {
           <Input
             placeholder="请输入关键词"
             value={keyword2}
+            maxLength={20}
             onChange={(e) => setKeyword2(e.target.value)}
           ></Input>
         </div>

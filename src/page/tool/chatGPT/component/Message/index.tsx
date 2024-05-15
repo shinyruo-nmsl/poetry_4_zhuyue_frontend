@@ -12,12 +12,7 @@ export interface Message {
 }
 
 const getCodeTemplate = (code: string) => {
-  return `<div class="hl-code">
-            <div class="hl-code-header"></div>
-            <div class="hljs">
-              <code>${code}</code>
-            </div>
-          </div>`;
+  return `<div class="hl-code"><div class="hl-code-header"></div><div class="hljs"><code>${code}</code></div></div>`;
 };
 
 const markdown: MarkDown = MarkDown({

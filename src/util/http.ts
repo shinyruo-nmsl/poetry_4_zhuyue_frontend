@@ -79,10 +79,14 @@ export async function createFetchStream<
     }
   );
 
-  const reader = handleResponse({
-    status: response.status,
-    data: response.body!.getReader(),
-  });
+  if (response.status > 200) {
+    handleResponse({
+      status: response.status,
+      data: await response.json(),
+    });
+  }
+
+  const reader = response.body!.getReader();
 
   const stream = {
     async next() {

@@ -1,7 +1,7 @@
 import { SubRoute } from "../global-type/router";
 import { AppstoreOutlined, MailOutlined } from "@ant-design/icons";
 
-import { AIChat } from "../page/tool";
+import { AIChat, Admin } from "../page/tool";
 
 const subRouter: SubRoute = {
   path: "tool",
@@ -15,6 +15,14 @@ const subRouter: SubRoute = {
       key: "tool_ai",
       icon: <AppstoreOutlined />,
       element: <AIChat />,
+    },
+    {
+      path: "admin",
+      label: "管理员",
+      key: "tool_admin",
+      auths: ["admin"],
+      icon: <AppstoreOutlined />,
+      element: <Admin />,
     },
   ],
 };

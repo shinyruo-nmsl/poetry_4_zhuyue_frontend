@@ -5,7 +5,7 @@ import {
   splitPoetryContentByKeyWords,
   PoetryPagination,
 } from "./service";
-import PaginationTable from "../../../component/PaginationTable";
+import { PaginationTableAsync } from "../../../component/PaginationTable";
 import "./index.less";
 
 function PoetrySearch() {
@@ -16,7 +16,12 @@ function PoetrySearch() {
   const [pageNo, setPageNo] = useState(0);
   const [limit, setLimit] = useState(5);
 
-  const [poetryPagination, setPoetryPagination] = useState<PoetryPagination>();
+  const [poetryPagination, setPoetryPagination] = useState<PoetryPagination>({
+    total: 0,
+    data: [],
+    limit: 5,
+    pageNo: 0,
+  });
 
   const tableColumns = [
     {
@@ -62,7 +67,7 @@ function PoetrySearch() {
     },
   ];
 
-  const handleChangePage = async (no: number, size: number) => {
+  const handleChangeTable = async (no: number, size: number) => {
     setPageNo(no);
     setLimit(size);
     const data = await fetchGetPoetriesByAuthorAndKeyWords({
@@ -124,7 +129,7 @@ function PoetrySearch() {
         <Button onClick={handleClickSearchButton}>搜索</Button>
       </div>
 
-      <PaginationTable
+      <PaginationTableAsync
         tableProps={{
           columns: tableColumns,
           rowKey: (row) => row.id,
@@ -133,8 +138,8 @@ function PoetrySearch() {
         paginationData={poetryPagination}
         pageNo={pageNo}
         limit={limit}
-        onChangePage={handleChangePage}
-      ></PaginationTable>
+        onChangeTable={handleChangeTable}
+      />
     </div>
   );
 }

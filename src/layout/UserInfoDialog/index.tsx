@@ -1,5 +1,5 @@
-import { Modal, Form, Upload, Button, Input, message, UploadFile } from "antd";
-import { UploadOutlined, UserOutlined } from "@ant-design/icons";
+import { Modal, Form, Input, message } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import { UserLoginDisplayInfo } from "../../global-type/user";
 import { CharacterAvatar } from "../../component/Avatar";
 import { useState } from "react";
@@ -22,23 +22,23 @@ function UserInfoDialog({
   const [_userName, setUserName] = useState(userName);
   const [_avatar, setAvatar] = useState(avatar);
 
-  const handleBeforeUploadAvatar = async (file: File) => {
-    if (file.size > 1024 * 1024 * 10) {
-      message.warning("文件太大啦~");
-      return false;
-    }
+  // const handleBeforeUploadAvatar = async (file: File) => {
+  //   if (file.size > 1024 * 1024 * 10) {
+  //     message.warning("文件太大啦~");
+  //     return false;
+  //   }
 
-    return true;
-  };
+  //   return true;
+  // };
 
-  const handleUploadAvatar = async (uploadFile: UploadFile) => {
-    const file = uploadFile.originFileObj!;
+  // const handleUploadAvatar = async (uploadFile: UploadFile) => {
+  //   const file = uploadFile.originFileObj!;
 
-    if (uploadFile.status === "uploading") {
-      const url = URL.createObjectURL(file);
-      setAvatar(url);
-    }
-  };
+  //   if (uploadFile.status === "uploading") {
+  //     const url = URL.createObjectURL(file);
+  //     setAvatar(url);
+  //   }
+  // };
 
   const handleClickConfirmButton = () => {
     if (!_userName) {

@@ -1,5 +1,13 @@
+import { Opiton } from "../global-type/model";
 import { Role } from "../global-type/user";
 import { AuthToken } from "../util/http";
+
+export const UserRoles: Role[] = ["admin", "ordinary"];
+
+export const UserRoleOptions: Opiton<Role>[] = UserRoles.map((role) => ({
+  label: formatUserRole(role),
+  value: role,
+}));
 
 export function exitLogin() {
   AuthToken.remove();

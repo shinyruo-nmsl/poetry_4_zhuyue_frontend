@@ -1,33 +1,17 @@
-import MarkDown from "markdown-it";
-import hljs from "highlight.js";
-import "highlight.js/styles/atom-one-dark-reasonable.css";
-
 import { CharacterAvatar, UserAvatar } from "../../../../../component/Avatar";
 
 import "./index.less";
+import { createMarkdown } from "../../../../../util/html";
 
 export interface Message {
   role: "gpt" | "user";
   content: string;
 }
 
-const getCodeTemplate = (code: string) => {
-  return `<div class="hl-code"><div class="hl-code-header"></div><div class="hljs"><code>${code}</code></div></div>`;
-};
-
-const markdown: MarkDown = MarkDown({
-  highlight: function (str: string, lang: string) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return getCodeTemplate(
-          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    return getCodeTemplate(markdown.utils.escapeHtml(str));
-  },
+const markdown = createMarkdown({
+  borderRadius: "5px",
+  padding: "10px",
+  margin: "10px 0",
 });
 
 function UserMessageBox({ content }: { content: string }) {

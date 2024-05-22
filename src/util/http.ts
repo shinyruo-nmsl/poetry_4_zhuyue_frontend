@@ -124,16 +124,22 @@ function appendToken(headers: any) {
 function handleResponse<T>(res: { status: number; data: T }) {
   const code = res.status;
 
+  if (code === 200) return res.data;
+
   switch (code) {
     case 400:
       throw new Error((res.data as { msg: string })?.msg || "参数出错~");
     case 401:
       HttpEventEmitter.triggerHandler("code_401");
       throw new Error((res.data as { msg: string })?.msg || "暂未登录~");
+    case 403:
+      throw new Error((res.data as { msg: string })?.msg || "暂无访问权限~");
+    case 408:
+      throw new Error((res.data as { msg: string })?.msg || "连接超时~");
     case 500:
       throw new Error((res.data as { msg: string })?.msg || "服务端错误~");
     default:
-      return res.data;
+      throw new Error((res.data as { msg: string })?.msg || "网络开小差啦~");
   }
 }
 

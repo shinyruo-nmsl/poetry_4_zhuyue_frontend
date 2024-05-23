@@ -8,22 +8,6 @@ export async function fetchGetUserLoginInfo() {
   });
 }
 
-export async function fetchUpdateUserName(userName: string) {
-  return request({
-    method: "post",
-    url: "/user/updateUserName",
-    data: { userName },
-  });
-}
-
-export async function fetchUpdateUserAvatar(avatar: string) {
-  return request({
-    method: "post",
-    url: "user/updateUserAvatar",
-    data: { avatar },
-  });
-}
-
 export async function fetchUpdateUserDisplayInfo(
   userInfo: UserLoginDisplayInfo
 ) {

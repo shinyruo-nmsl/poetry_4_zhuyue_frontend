@@ -49,7 +49,9 @@ function SearchBar({
             onChange={(type) => onChange({ type, value: "" })}
           >
             {searchTypeOptions.map(({ label, value }) => (
-              <Select.Option value={value}>{label}</Select.Option>
+              <Select.Option key={value} value={value}>
+                {label}
+              </Select.Option>
             ))}
           </Select>
         </Form.Item>

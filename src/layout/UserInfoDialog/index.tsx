@@ -20,7 +20,7 @@ function UserInfoDialog({
   onCloseModal,
 }: UserInfoDialogProps) {
   const [_userName, setUserName] = useState(userName);
-  const [_avatar, setAvatar] = useState(avatar);
+  // const [_avatar, setAvatar] = useState(avatar);
 
   // const handleBeforeUploadAvatar = async (file: File) => {
   //   if (file.size > 1024 * 1024 * 10) {
@@ -45,7 +45,7 @@ function UserInfoDialog({
       message.error("昵称为空~");
       return;
     }
-    onConfirm({ userName: _userName, avatar: _avatar, role });
+    onConfirm({ userName: _userName, avatar, role });
   };
 
   return (
@@ -70,7 +70,7 @@ function UserInfoDialog({
           >
             <CharacterAvatar
               characterName={_userName}
-              avatar={_avatar}
+              avatar={avatar}
               size={50}
             />
             {/* <Upload

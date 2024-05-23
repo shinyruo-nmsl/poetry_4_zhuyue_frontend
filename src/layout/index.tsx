@@ -37,14 +37,22 @@ export default function Layout() {
   const [userInfoDialogVisible, setUserInfoDialogVisible] = useState(false);
 
   const hanleClickExitLoginMenu = async () => {
-    await loginDispatch({ type: "exit" });
-    message.info("退出成功~");
+    try {
+      await loginDispatch({ type: "exit" });
+      message.info("退出成功~");
+    } catch {
+      message.error("退出失败~");
+    }
   };
 
   const handleComfirmChangeUserInfo = async (info: UserLoginDisplayInfo) => {
-    await loginDispatch({ type: "update_display_info", userInfo: info });
-    message.success("修改成功~");
-    setUserInfoDialogVisible(false);
+    try {
+      await loginDispatch({ type: "update_display_info", userInfo: info });
+      message.success("修改成功~");
+      setUserInfoDialogVisible(false);
+    } catch {
+      message.error("修改失败~");
+    }
   };
 
   return (

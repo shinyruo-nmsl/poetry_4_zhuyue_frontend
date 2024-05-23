@@ -10,12 +10,7 @@ import {
   UserLoginDispatch,
   UserLoginDisplayInfo,
 } from "../global-type/user";
-import {
-  fetchGetUserLoginInfo,
-  fetchUpdateUserAvatar,
-  fetchUpdateUserDisplayInfo,
-  fetchUpdateUserName,
-} from "../api/user";
+import { fetchGetUserLoginInfo, fetchUpdateUserDisplayInfo } from "../api/user";
 import { exitLogin } from "../service/user";
 
 export const UserLoginInfoContext = createContext<UserLoginInfo>({
@@ -45,22 +40,6 @@ export function UserLoginProvider({ children }: { children: ReactElement }) {
     refresh();
   };
 
-  const updateAvatar = async (avatar: string) => {
-    if (userLoginInfo.role === "visitor") {
-      throw new Error("用户尚未登录~");
-    }
-    await fetchUpdateUserAvatar(avatar);
-    refresh();
-  };
-
-  const updateUserName = async (userName: string) => {
-    if (userLoginInfo.role === "visitor") {
-      throw new Error("用户尚未登录~");
-    }
-    await fetchUpdateUserName(userName);
-    refresh();
-  };
-
   const updateUserDisplayInfo = async (userInfo: UserLoginDisplayInfo) => {
     if (userLoginInfo.role === "visitor") {
       throw new Error("用户尚未登录~");
@@ -76,12 +55,6 @@ export function UserLoginProvider({ children }: { children: ReactElement }) {
         break;
       case "refresh":
         await refresh();
-        break;
-      case "update_name":
-        await updateUserName(action.userName);
-        break;
-      case "update_avatar":
-        await updateAvatar(action.avatar);
         break;
       case "update_display_info":
         await updateUserDisplayInfo(action.userInfo);

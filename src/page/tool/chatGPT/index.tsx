@@ -1,16 +1,20 @@
 import { useLayoutEffect, useRef, useState, KeyboardEvent } from "react";
 import { Divider, Input, message } from "antd";
 
-import { fetchPostPromotMessage } from "./service";
+import { fetchPostPromotMessage, useMessageStore } from "./service";
 import MessageBox, { Message } from "./component/Message";
 
 import "./index.less";
 
 function ChatGPT() {
+  const { historyMessages, saveMessages2LocalStore } = useMessageStore();
+
   const [prompt, setPrompt] = useState("");
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "gpt", content: "我是您的AI助手，欢迎提问👏🏻" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>(
+    historyMessages.length > 0
+      ? [...historyMessages]
+      : [{ role: "gpt", content: "我是您的AI助手，欢迎提问👏🏻" }]
+  );
   const [isPending, setIsPending] = useState(false);
   const messagesRef = useRef<HTMLDivElement>(null);
 
@@ -33,6 +37,7 @@ function ChatGPT() {
         ...messages,
         { role: "gpt", content: "" },
       ]);
+      let gptMessage4Store = "";
       for await (const chunk of stream) {
         setMessages((messages: Message[]) => {
           const gptMessage = messages[messages.length - 1];
@@ -41,7 +46,12 @@ function ChatGPT() {
             { ...gptMessage, content: gptMessage.content + chunk },
           ];
         });
+        gptMessage4Store = gptMessage4Store + chunk;
       }
+      saveMessages2LocalStore([
+        { role: "user", content: prompt },
+        { role: "gpt", content: gptMessage4Store },
+      ]);
     } catch (err: any) {
       message.error(err.message);
     } finally {

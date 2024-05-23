@@ -18,7 +18,5 @@ export type UserLoginDispatch = (
   action:
     | { type: "exit" }
     | { type: "refresh" }
-    | { type: "update_name"; userName: string }
-    | { type: "update_avatar"; avatar: string }
     | { type: "update_display_info"; userInfo: UserLoginDisplayInfo }
 ) => Promise<void>;
